@@ -103,16 +103,30 @@ class ParkingSystem:
         currentHour = datetime.datetime.now().hour
         isParked = self.parkingGarage.park_vehicle(driver.get_vehicle())
         if isParked:
-            self.timeParked[driver.getId()] = currentHour
+            self.timeParked[driver.get_id()] = currentHour
         return isParked
     
     def remove_vehicle(self, driver):
-        if driver.getId() not in self.timeParked:
+        if driver.get_id() not in self.timeParked:
             return False
         currentHour = datetime.datetime.now().hour
-        timeParked = math.ceil(currentHour = self.timeParked[driver.get_id()])
+        timeParked = math.ceil(currentHour - self.timeParked[driver.get_id()])
         driver.charge(timeParked * self.hourlyRate)
 
-        del self.timeParked[driver.getId()]
+        del self.timeParked[driver.get_id()]
         return self.parkingGarage.remove_vehicle(driver.get_vehicle())
     
+parkingGarage = ParkingGarage(3, 2)
+parkingSystem = ParkingSystem(parkingGarage, 5)
+
+driver1 = Driver(1, Car())
+driver2 = Driver(2, Limo())
+driver3 = Driver(3, SemiTruck())
+
+print(parkingSystem.park_vehicle(driver1))      # true
+print(parkingSystem.park_vehicle(driver2))      # true
+print(parkingSystem.park_vehicle(driver3))      # false
+
+print(parkingSystem.remove_vehicle(driver1))    # true
+print(parkingSystem.remove_vehicle(driver2))    # true
+print(parkingSystem.remove_vehicle(driver3))    # false
