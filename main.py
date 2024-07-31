@@ -51,7 +51,7 @@ class ParkingFloor:
         while r < len(self.spots):
             if self.spots[r] != 0:
                 l = r +1
-            if r - 1 + 1 == size:
+            if r - l + 1 == size:
                 # We found enough spots, park the vehicle
                 for k in range(l, r + 1):
                     self.spots[k] = 1
@@ -59,3 +59,16 @@ class ParkingFloor:
                 return True
             r += 1
         return False
+
+    def remove_vehicle(self, vehicle):
+        start, end = self.vehicle_map[vehicle]
+        for i in range(start, end + 1):
+            self.spots[i] = 0
+        del self.vehicle_map[vehicle]
+    
+    def get_parking_spots(self):
+        return self.spots
+    
+    def get_vehicle_spots(self, vehicle):
+        return self.vehicle_map.get(vehicle)
+    
