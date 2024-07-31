@@ -91,3 +91,28 @@ class ParkingGarage:
                 floor.remove_vehicle(vehicle)
                 return True
         return False
+    
+
+class ParkingSystem:
+    def __init__(self, parkingGarage, hourlyRate):
+        self.parkingGarage = parkingGarage
+        self.hourlyRate = hourlyRate
+        self.timeParked = {}
+
+    def park_vehicle(self, driver):
+        currentHour = datetime.datetime.now().hour
+        isParked = self.parkingGarage.park_vehicle(driver.get_vehicle())
+        if isParked:
+            self.timeParked[driver.getId()] = currentHour
+        return isParked
+    
+    def remove_vehicle(self, driver):
+        if driver.getId() not in self.timeParked:
+            return False
+        currentHour = datetime.datetime.now().hour
+        timeParked = math.ceil(currentHour = self.timeParked[driver.get_id()])
+        driver.charge(timeParked * self.hourlyRate)
+
+        del self.timeParked[driver.getId()]
+        return self.parkingGarage.remove_vehicle(driver.get_vehicle())
+    
