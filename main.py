@@ -1,5 +1,8 @@
-""" OOP python application for a parking lot system design """
 
+import datetime
+import math
+
+""" OOP python application for a parking lot system design """
 
 class Vehicle:
     """ size """
@@ -72,3 +75,19 @@ class ParkingFloor:
     def get_vehicle_spots(self, vehicle):
         return self.vehicle_map.get(vehicle)
     
+class ParkingGarage:
+    def __init__(self, floor_count, spots_per_floor):
+        self.parking_floors = [ParkingFloor(spots_per_floor) for _ in range(floor_count)]
+
+    def park_vehicle(self, vehicle):
+        for floor in self.parking_floors:
+            if floor.park_vehicle(vehicle):
+                return True
+        return False
+    
+    def remove_vehicle(self, vehicle):
+        for floor in self.parking_floors:
+            if floor.get_vehicle_spots(vehicle):
+                floor.remove_vehicle(vehicle)
+                return True
+        return False
